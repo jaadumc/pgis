@@ -1,0 +1,113 @@
+practical-1
+
+a)Adding vector layer
+b)Setting properties
+c)Vector Layer Formatting
+
+Procedure:
+
+a. Adding vector layers(Polygon,Line,Points)
+	
+	-Polygon layers(We have taken 2 layers Matunga,Garden)
+	-Line layers(we have taken 3 layers Small_Roads,Road,Flyover)
+	-Point layers(We have taken 4 layers bank,college,Restaurants,ATM)
+
+b.Setting properties(Labelling,Symbolism)
+
+Our aim is to create map representing a location and its surrounding as follows:
+
+  a) Creating Polygon vector layer
+	
+	-select Project----->New
+	-select Layer--->Create Layer---->New Shapefile Layer
+
+  -Following dialog box will appear on the screen.Select Polygon option from   
+	Geometry type.
+
+  -Fill the appropriate information in each text box.
+	. File name:
+		-By default the file will be saved in bin folder.
+		-To avoid it click on following button to change the location of file.
+  -Field panel
+	=Add the attribute you want to show.(Column Name for table)
+	b. Specify Type(DataType:Text Data/Decimal Data/Whole Number/Date)of Attribute
+	c. Specify the Length of the attribute. Specify Precision(If Data Type is Decimal)
+  - Click on Add to Field list Button.
+  - You can add as many fields (Column Name) as you want for the layer.
+  - Select Geometry Type as follows
+	. Click on the following buttons
+  - The CRS dialog box will appear on screen.Click on the WGS84 option and it will be selected as follows.Click on OK
+
+a) Follow the steps to plot Polygon features.
+- Select the Polygon Feature(in our case it is Matunga for background)from layer panel
+-Click Toggle Editing Button(pencil icon)---> Click on Add Polygon icon---->now place the cursor at the location where you want to place the 	polygon . for polygon layer minimum 3 points should be selected 
+
+- Save the newly added polygon as follows.
+		id:1, Name:Matunga
+
+-set style for polygon by using property window(Right Click on Matunga 	Layer)
+- Following screen will appear on the screen. Select pattern as you want and click on OK.
+- Same way we can add one more polygon layer for Gardens.
+
+b)Creating Line vector layer
+
+-Repeat the same steps as we have done for ploygon layer.
+-Select geometry type Line.
+
+-Road Layer:
+  - To plot click on Add Line Feature.
+  - Click on the map where you want to draw line.
+  - Once you are done then right click on map(Dotted line turn into solid line)
+  - save your data
+
+Road-Feature Attributes--->id:1,Name:Matunga Pool
+
+- set style for Roads in the same way as we have done for polygon
+- Properties--->Symbology------>Topo road.
+
+- Road will look as below
+- To label your roads Right CLick on Road Layer. Go to properties window then select label and set single label property
+- Window will appear on the screen----> Click ok
+
+- To merge roads
+	. Go to properties of road then select symbology. Click on Advanced button select Symbol levels.
+	. Check Enable symbol Levels option
+	. Click OK and road will appear
+
+c) Create Point vector layer
+	- Repeat same steps to add point layers as we have done in previous layers(For ATM,Restaurants,Banks,Bus Stops etc)
+
+d) Calculating line lengths and statistics
+
+- Go to layer--->Add layer--->Add Vector layer
+- Add the following file to project
+	"\GIS_Workshop\Practicals\Practical_01\D\DATA\IND_rrd\IND_rails.shp"
+	Press"ADD"
+- Also add india Administrative Map
+	"GIS_Workshop\Practicals\Practical_01\D\DATA\IND_adm0.shp1"
+- Double Click on IND_adm0
+- Select Symbology---->Select any outline style from below given options.
+
+Press OK
+- The display window will appear like(India Map will lines inside).
+
+- In Layer Pane,Right click on IND_rails--->Open Attribute Table
+
+- Press Toggle Editing button using (pencil) button, on Attribute table 	wndow toolbar.
+- Press Open Field Calculator using (Calculator icon)button.
+- Set the output field as "Track_Len",field type to "Decimal Number",field 	Length to 0  and precision to 2.
+- From Function List search $length or go to Geometry--->Select $length
+- Set expression as ($length/1000)
+-Press OK
+
+- A new column is added to the attribute table with value representing the 	 length of track in KM.
+- Press CTRL+S or click on Save Edits option on tool bar
+- Close the attribute table window.
+- For calculating the total length of Railway tracks in India.
+- Select Vector---->Analysis Tools---->Basic statics for Fields
+- Select IND_rails layer from input layer.And select Track_Len in "Field to Calculate statistics on".
+
+- Press RUN
+- Open the "output.html" file to get the field statistics.
+-The above statistics show that the total length of Raiway track in India is
+	60,479.32 KM

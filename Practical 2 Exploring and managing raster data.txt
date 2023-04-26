@@ -1,0 +1,51 @@
+Practical 2: Exploring and managing raster data
+*applying raster data
+*raster styling
+*raster mosaicking and clipping
+
+*Adding raster layers
+
+layer->Add layer->Add raster layer->click on 3 dot->select the layer->data set->practical 2
+->glds90ag60.asc->add->close
+
+Add another layer
+layer->Add layer->Add raster layer->click on 3 dot->select the layer->data set->practical 2
+->glds90ag60.asc->add->close
+Right click on layer 1->properties->render type->singleband psuedocolor->min:0->max:240->classify->apply->ok
+Do the same for layer 2
+
+*Now to analayse the data
+
+Raster->Raster calculator->output layer->name:population_diff->Click on 3 dot to save the data->Click on the Raster Band ->Double click the first layer->use the symbol '-' -> then double click  the second layer->output CRS:Wgs 84 ->OK
+
+Now disconnect both the layer on (ticked box) population_diff should be enable.
+
+Right click on population_diff ->Properties ->Symbology ->Render : Singleband  psedcolor ->min: -20000 ->max: 6000->Interpolation:Discret ->color ramp  (own choice) ->delete all the label -> start to add new label by clicking(+) ->make the following
+
+value<=		color			label
+-20000					no data
+-10						negative
+10						neutral
+6000						positive
+
+Note:choose any color ramp to identify the data.
+
+*Raster mosaicking and clipping
+
+layer->add layer->add raster layer->click on 3 dot to upload the data->data set->practical 2->data->select the 4 image (FAS img)
+
+Raster->miscellenous -> merge -> 	Input layer -> select all ->run -> close
+
+diselect the other layer ->enable only (ticked box) Merge layer
+
+Layer -> add layer ->add vector layer ->dataset ->pract 1->Ind_admn.shp-> Add->close .
+Right click on merge -> properties ->symbology ->select any outline with proper color -> apply ->ok
+
+Raster-> Extraction ->clip rsater by mask  layer->input layer -> merged ->mask ->ind_adm0 ->run ->close -> final outputs
+
+
+
+
+
+
+

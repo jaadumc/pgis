@@ -1,0 +1,107 @@
+Practical 9 Advance GIS Operations 2: 
+a) Batch Processing using Processing Framework 
+Procedure 1. Go to Layer ‣ Add Vector Layer. 
+2. Browse to the downloaded Admin 0 Countries shapefile ne_10m_admin_0_countries.shp and click Open. 
+3. As our task is to clip the global layers to the boundary of Africa, we need to first prepare a layer containg a polygon for the entire continent.The countries layer has an attribute called CONTINENT. 
+We can use a geoprocessing concept called Dissolve to merge all countries that have the same continent value and merge them to a single polygon.
+4. Open the Dissolve tool from Vector ‣ Geoprocessing Tools ‣ Dissolve. 
+5. Select ne_10m_admin_0_countries as the Input vector layer. The Dissolve field would be CONTINENT. Name the output file as continents.shp and check the box next to Add result to convas. Note If you want to merge ALL polygons regardless of their attributes, you can select – Dissolve All – as the Dissolve field. This will combine all polygons in the layer and give you a single aggregate polygon. 6. The dissolve processing may take a while. Once the process finishes, you will see the new continent layer added to QGIS. Use the Select Single Feature tool from the toolbar and click on Africa to select the polygon representing the continent.
+7. Right-click the continents layer and select Save Selection As....
+8. Name the output file as africa.shp. Since we are only interested in the shape of the continent and not any attributes, you may check the Skip attribute creation. Make sure the Add saved file to map box is checked and click OK.
+9. Now you will have the africa layer loaded in QGIS containing a single polygon for the entire continent. Now, it’s time to start our batch clip process. Open Processing ‣ Toolbox. 
+10. Browse all available algorithms and find the Clip tool from QGIS geoalgorithms ‣ Vector overlay tools ‣ Clip. You may also use the Search box to easily find the algorithm as well.
+11. Right-click the Clip algorithm and select Execure as batch process. 
+12. In the Batch Processing dialog, the first tab is Parameters where we define out inputs. Click the ... next to the first row in the Input layer column.
+13. Browse to the directory containing the global transportation layers that you had downloaded. Hold the Ctrl key and select all the layers that you want to clip. You may also use Shift or Ctrl-A to make multiple selection. Click Open. 
+14. You will notice that the Input layer columns will be auto-populated with all layers you had selected. You may use Add row button to add more rows and define more inputs. Next, we need to select the layer containing the boundary to clip our input layers. Click the ... button for the first row and add the africa.shp Clip layer. Since the clip layer is the same for all our inputs, you can double-click the column header Clip layer and the same layer will be auto-filled for all the rows. Next, we need to define our outputs. Click the ... buton next to the first row in the Clipped column.
+15. Browse the the directory where you want your output layers. Type the filename as clipped_ and click Save. 
+16. You will see a new Autofill settings dialog pop up. Select Fill with parameter values as the Autofill mode. Select Parameter to useas Input layer. This setting will add the input file name to the output along with the specified output_ filename. This is important to ensure all the output files have unique names and they do not overwrite each other.
+17. Now we are ready to start the batch procesing. Click Run. 
+18. The clip algorithm will run for each of the inputs and create output files are we have specified. Once the batch process finishes, you will see the layers added to QGIS canvas. As you will notice, all the global layers are properly clipped to the continent boundary that we had specified.
+
+
+
+9B. Automating Complex Workflows using Processing Modeler
+
+Procedure Our workflow for this exercise will have the following steps. 
+• Apply a Majority Filter algorithm to the input landcover raster. This will reduce noise in our output by eliminating isolated pixels. 
+• Convert the resulting raster to a polygon layer. 
+• Query for a class value from the attribute table of the polygon layer and create a vector layer for that class. 
+The following steps outline the process to code the above process into a model and run it on the downloaded datasets. 
+1. Launch QGIS and go to Processing ‣ Graphical Modeler....
+2. The Processing modeler dialog contains a left-hand panel and a main canvas. Select the Inputs tab in the left-hand panel and drag the + Raster layer to the canvas.
+3. A Parameter definition dialog will pop-up. Enter Input as the Parameter name and mark Yes to Required. Click OK.
+4. You will see a box with the name Input appear in the canvas. This represents the landcover raster that we will use as input. Next step is to apply a Majority filter algorithm. Switch to the Algorithm tab from the bottom-left corner. Search for the algorithm and you will find it listed under SAGA provider. Drag it to the canvas. Note If you do not see this algorithm or any of the subsequent algorithms mentioned in thi tutorial, you may be using the Simplified Interface of the Processing Toolbox. Switch to the Advanced Interface by using the dropdown at the bottom of the Processing Toolbox in the main QGIS window.
+5. A configuration dialog for Majority Filter will be presented. Leave the values to their default and click OK.
+6. You will note that there is now a new box named Majority Filter in the canvas and it is connected to the Input box. This is because the Majority Filter algorithm uses the Input raster as its input. The next step in our workflow is to convert the output of majority filter to vector. Find the Polygonize (raster to vector) algorithm and drag it to the canvas. Note The boxes can be moved and arranged by clicking on it and dragging it while holding the left mouse button. You can also use the scroll-wheel to zoom in and out in the model canvas.
+7. Select ‘Filtered Grid’ from algorithm ‘Majority Filter’ as the value for Input layer. Click OK.
+8. The final step in the workflow is to query for a class value and create a new layer from the matching features. Search for the Extract by attribute algorithm and drag it the canvas.
+9. Select ‘Vectorized’ from algorithm ‘Polygonize (raster to vector) as the Input Layer. We want to extract the pixels that represent Croplands. The corresponding pixel value for this class will be 12. (see Code Values). Enter DN as the Selection attribute and 12as the value. As the output of this operation will be the final result, we need to name the output. Enter vectorized class as the Output.
+10. Enter the Model name as vectorize and Group name as raster. Click the Save button.
+11. Name the model vectorize and click Save.
+12. Now it is time to test our model. Close the modeler and switch to the main QGIS window. Go to Layer ‣ Add Layer ‣ Add Raster Layer....
+13. Browse to the downloaded LC_hd_global_2001.tif.gz file and click Open. Once the raster is loaded, go to Processing ‣ Toolbox.
+14. Find the newly created model under Models ‣ raster ‣ vectorize. Double-click to launch the model.
+15. Select LC_hd_global_2001 as the Input and click Run.
+16. You will see all the steps being executed without any user input. Once the processing finishes, a new layer vectorized_classwill be added to QGIS. Let’s improve the model a little bit. Right-click on the vectorize model and select Edit model.
+17. In Step 12, we hard-coded the value 12 as the class value. Instead, we can specify it as a input parameter which the user can change. To add this, switch to the Inputs tab and drag the + String to the model.
+18. Enter the Parameter Name as Class. Enter 12 as the Default value.
+19. We will now change the Extract by attribute algorithm to use this input instead of the hard-coded value. Click the Edit button next to the Extract by attribute box.
+20. Click the dropdown arrow for Value and select Class. Click OK.
+21. You will see from the model diagram that the Extract by attribute algorithm now uses 2 inputs. The modeler has a shortcut to launch the model and test it. Click the Run button from the toolbar.
+22. Notice that the model dialog has a new editable field called Class. Enter 16 as the Class value and click Run.
+23. Once the processing finishes, you will see that with just a click of a button we were able to run a complex workflow and extract the area for class 16.
+24. Now that our model is ready, we can run it just as easily on a new raster layer. Load the LC_hd_global_2012.tif.gz file by going to Layer ‣ Add Layer ‣ Add Raster Layer.... Click the vectorize` model from the Processing Toolbox panel.
+25. Pick the LC_hd_global_2012 layer as the Input and click Run.
+26. Once the new output is loaded, you can compare the changes in the Croplands from 2001 to 2012.
+27. It is always a good idea to add documentation to your model. The modeler has a built-in Help editor that allows you to embed help directly in the model. Right-click the vectorize model and select Edit model.
+28. Click the Edit model help button from the toolbar.
+29. In the Help editor dialog, select any item from the Select element to edit panel and enter the help text in Element description. Click OK. This help will be available in the Help tab when you launch the model to run.
+
+
+
+9C Automating Map Creation with Print Composer Atlas
+Procedure 
+1. Launch QGIS and go to Layer ‣ Add Layer ‣ Add Vector Layer. 
+2. owse to the HI_Wetlands.shp.zip file and click Open.
+3. Select the HI_Wetlands_Poly layer and click OK.
+4. You will see the polygons representing the wetlands in the entire state of Hawaii. Since we want to make separate wetlands map for each county in the state, we will need the county boundaries layer. Go to Layer ‣ Add Layer ‣ Add Vector Layer and browse to the county10.shp.zip file. Click Open.
+5. Go to Project ‣ New Print Composer.
+6. Leave the composer title field empty and click OK.
+7. Go to Layout ‣ Add Map.
+8. Drag a rectangle while holding the left mouse button where you would like to insert the map.
+9. Scroll down in the Item Properties tab and check the Controlled by atlas box. This will indicate the composer that the extent of the map displayed in this item will be determined by the Atlas tool.
+10. Switch to the Atlas generation tab. Check the Generate an atlas box. Select the county10 as the Coverage layer. This will indicate that we want to create 1 map each for every polygon feature in the county10 layer. You can also check the Hidden coverage layer so that the features themselves will not appear on the map.
+11. You will notice that the map image does not change after configuring the Atlas settings. Go to Atlas ‣ Preview Atlas.
+12. Now you will see the map refresh and show how individual map will look like. Notice that it shows the current feature number from the coverage layer at the bottom right.
+13. You can preview how the map will look for each of the county polygons. Go to Atlas ‣ Next Feature.
+14. Atlas will render the map to the extent of the next feature in the coverage layer.
+15. Let’s add a label to the map. Go to Layout ‣ Add Label.
+16. Under the Item properties tab, click Insert an expression... button.
+17. The label of the map can use the attributes from the coverage layer.he concat function is used to join multiple text items into a single text item. In this case we will join the value of the NAME10 attribute of the county10 layer with the text County of. Add an expression like below and click OK. 
+concat('County of ', "NAME10") 
+18. Adjust the font size to your liking.
+19. Add another label and enter Wetlands Map under the Main properties. Since there is no expression here, this text will remain the same on all maps.
+20. Go to Atlas ‣ Last Feature and verify that the map labels do work as intended. You will notice that the wetland map has polygons extending out in the ocean that looks ugly. We can change the style to that areas outside the county boundaries are hidden.
+21. Switch to the main QGIS window. Right-click the county10 layer and select Properties.
+22. In the Style tab, select the Inverted polygons renderer. This renderer styles the outside of the polygon - not inside. Select white as the fill color and click OK.
+23. Switch to the Print Composer window. If we want the effect of the inverted polygons to show, we need to uncheck the Hidden coverage layer box under Atlas generation. You will now see that the rendered image is clean and areas outside the coverage polygon is not visible.
+24. There is one problem though. You can see areas of the map that are outside the coverage layer boundary but still visible. This is because Atlas doesn’t automatically hide other features. This can be useful in some cases, but for our purpose, we only want to show wetlands of the county whose map is being generated. To fix this, switch back to the main QGIS window and right-click the county10 layer and select Properties.
+25. In the Style tab, select Rule-based renderer as the Sub renderer. Double-click the area under Rule.
+26. Click the ... button next to Filter.
+27. In the Expression string builder, expand the Atlas group of functions. The $atlasfeatureid function will return the currently selected feature. We will construct an expression that will select only the currently selected Atlas feature. Enter the expression as : $id=$atlasfeatureid
+28. Back in the Print Composer window, click the Update preview button under Item properties tab to see the changes. Notice that now only the area covering the county boundary is shown.
+29. We will now add another dynamic label to show the current date. Go to Layout ‣ Add Label and select the area on the map. ClickInsert an expression button.
+30. Expand the Date and Time functions group and you will find the $now function. This holds the current system time. The function todate() will convert this to a date string. Enter the expression as below:
+concat('Created on: ', todate($now))
+31. Add another label citing the data source. You may also add other map elements such as a north arrow, scalebar etc. as described in Making a Map tutorial.
+32. Once you are satisfied with the map layout, go to Atlas ‣ Export Atlas as Images.
+33. Select a directory on your computer and click Choose. 34. The Atlas tool will now iterate through each feature in the coverage layer and create a separate map image based on the template we created. You can see the images in the directory once the process completes.
+35. Here are the map images for refeence.
+
+
+
+
+
+
+

@@ -1,0 +1,197 @@
+practical8
+
+Advanced GIS Operations 1: 
+a) Nearest Neighbor Analysis
+➢ Go to Layer → add Layer → add Delimited Text Layer and load “signif.txt” from data file.
+➢ Go to Layer → Add Layer → Add vector Layer and from data folder
+“\GIS_Workshop\Practicals\Practical_08\A\DATA\ne_10m_populated_places_simple.zip” load 
+the layer to the project and remove all rows from attribute table other than India.
+➢ Go to Vector→ Analysis tool → Distance Matrix
+➢ Calculate the Distance matrix and perform Nearest Neighbor Analysis 
+➢ Now you will be able to see the content of our results. The InputID field contains the field name 
+from the Earthquake layer. The TargetID field contains the name of the feature from the 
+Populated Places layer that was the closest to the earthquake point. The Distance field is the 
+distance between the 2 points.
+7. Here select the earthquake layer signif as the Input point layer and the populated 
+places ne_10m_populated_places_simpleas the target layer. You also need to select a unique 
+field from each of these layers which is how your results will be displayed. In this analysis, we 
+are looking to get only 1 nearest point, so check the Use only the nearest(k) target points, and 
+enter 1. Name your output file matrix.csv, and click OK. Once the processing finishes, 
+click Close.
+8. Once the processing finishes, click the Close button in the Distance Matrix dialog. You can now 
+view the matrix.csv file in Notepad or any text editor. QGIS can import CSV files as well, so 
+we will add it to QGIS and view it there. Go to Layer ‣Add Layer ‣Add Delimited Text 
+Layer....
+9. Browse to the newly created matrix.csv file. Since this file is just text columns, select No 
+geometry (attribute only table) as theGeometry definition. Click OK.
+10. You will see the CSV file loaded as a table. Right-click on the table layer and select Open 
+Attribute Table.
+11. Now you will be able to see the content of our results. The InputID field contains the field name 
+from the Earthquake layer. The TargetID field contains the name of the feature from the 
+Populated Places layer that was the closest to the earthquake point. The Distance field is the 
+distance between the 2 points.
+12. This is very close to the result we were looking for. For some users, this table would be 
+sufficient. However, we can also integrate this results in our original Earthquake layer using 
+a Table Join. Right-click on the Earthquake layer, and select Properties.
+13. Go to the Joins tab and click on the + button.
+14. We want to join the data from our analysis result to this layer. We need to select a field from 
+each of the layers that has the same values. Select matrix as the Join layer` and InputID as 
+the Join field. The Target field would be I_D. Leave other options to their default values and 
+click OK.
+15. You will see the join appear in the Joins tab. Click OK.
+16. Now open the attribute table of the signif layer by right-clicking and selecting Open Attribute 
+Table.
+17. You will see that for every Earthquake feature, we now have an attribute which is the nearest 
+neighbor (closest populated place) and the distance to the nearest neighbor.
+18. We will now explore a way to visualize these results. First, we need to make the table join 
+permanent by saving it to a new layer. Right-click the signif layer and select Save As....
+19. Click the Browse button next to Save as label and name the output layer 
+as earthquake_with_places.shp. Make sure the Add saved file to map box is checked and 
+click OK.
+20. Once the new layer is loaded, you can turn off the visibility of the signif layer. As our dataset is 
+quite large, we can run our visualization analysis on a subset of the data. QGIS has a neat 
+feature where you can load a subset of features from a layer without having to export it to a new 
+layer. Right-click the earthquake_with_places layer and select Properties.
+21. In the General tab, scroll down to the Feature subset section. Click Query Builder.
+22. For this tutorial, we will visualize the earthquakes and their nearest populated places for 
+Mexico. Enter the following expression in the Query Builder dialog.
+"COUNTRY" = 'MEXICO'
+23. You will see that only the points falling within Mexico will be visible in the canvas. Let’s do 
+the same for the populated places layer. Right-click on 
+the ne_10m_populated_places_simple layer and select Properties.
+24. Open the Query Builder dialog from the General tab. Enter the following expression.
+"adm0name" = 'Mexico'
+25. Now we are ready to create our visualization. We will use a plugin named MMQGIS. Find and 
+install the plugin. See Using Pluginsfor more details on how to work with plugins. Once you 
+have the plugin installed, go to MMQGIS ‣Create ‣Hub Lines.
+26. Select ne_10m_populated_places_simple as the Hub Point Layer and name as the Hub ID 
+Attribute. Similarly, selectearthquake_with_places as the Spoke Point Layer and matrix_Tar as 
+the Spoke Hub ID Attribute. The hub lines algorithm will go through each of earthquake points 
+and create a line that will join it to the populated place which matches the attribute we specified. 
+Click Browse and name the Output Shapefile as earthquake_hub_lines.shp. Click OK to start 
+the processing.
+27. The processing may take a few minutes. You can see the progress on the bottom-left corner of 
+the QGIS window.
+28. Once the processing is done, you will see the earthquake_hub_lines layer loaded in QGIS. You 
+can see that each earthquake point now has a line that connects it to the nearest populated place.
+
+B)Sampling Raster Data using Points or Polygons
+Many scientific and environmental datasets come as gridded rasters. Elevation data (DEM) is 
+also distributed as raster files. In these raster files, the parameter that is being represented is 
+encoded as the pixel values of the raster. Often, one needs to extract the pixel values at certain 
+locations or aggregate them over some area. This functionality is available in QGIS via two 
+plugins - Point SamplingTool and Zonal Statistics plugin.
+Procedure
+1. Go to Layer ‣Add Raster Layer and browse to the 
+downloaded us.tmax_nohads_ll_{YYYYMMDD}_float.tif file and click Open.
+2. Once the layer is loaded, select the Identify tool and click anywhere on the layer. You will see 
+the temperature value in celsius as the value or Band 1 at that location.
+3. Now unzip the downloaded 2013_Gaz_ua_national.zip file and extract 
+the 2013_Gaz_ua_national.txt file on your disk. Go to Layer ‣Add Delimited Text Layer.
+USIT6P4 (Discipline Specific Elective Practical) Principles of Geographic Information Systems Practical
+T. Y. B. Sc. (Information Technology) SEMESTER VI Teacher’s Reference Manual 
+105
+4. In the Create a Layer from Delimited Text File dialog, click Browse and 
+open 2013_Gaz_ua_national.txt. Choose Tab under Custom delimiters. The point coordinates 
+are in Latitude and Longitude, so select INTPTLONG as X field and INTPTLAT as Y field. 
+Check the Use spatial index box and click OK.
+5. Now we are ready to extract the temperature values from the raster layer. Install 
+the Point Sampling Tool plugin. See Using Plugins for details on how to install plugins.
+6. Open the plugin dialog from Plugins ‣Analyses ‣Point sampling tool.
+7. In the Point Sampling Tool dialog, select 2013_Gaz_ua_national as the Layer containing 
+sampling points. We must explicitely pick the fields from the input layer that we want in the 
+output layer. Choose GEOID and NAME fields from the2013_Gaz_ua_national layer. We can 
+sample values from multiple raster band at once, but since our raster has only 1 band, choose 
+the us.tmax_nohads_ll_{YYYYMMDD}_float: Band 1. Name the output vector layer 
+as max_temparature_at_urban_locations.shp. Click the OK to start the sampling process. 
+Click Close once the process finishes.
+8. You will see a new layer max_temparature_at_urban_locations loaded in QGIS. Use 
+the Identify tool to click on any point to see the attributes. You will see the us.tmax_no field -
+which contains the raster pixel value at the location of the point.
+9. First part of our analysis is over. Let’s remove the unnecessary layers. Hold the Shift key and 
+select max_temparature_at_urban_locations and 2013_Gaz_ua_national layers. Right-click and 
+select Remove to remove them from QGIS TOC.
+10. Go to Layer ‣Add Vector Layer. Browse to the downloaded tl_2013_us_county.zip file and 
+click Open. Select thetl_2013_us_county.shp as the layer and click OK.
+11. The tl_2013_us_county will be added to QGIS. This layer is in EPSG:4269 NAD83 projection. 
+This doesn’t match the projection of the raster layer. We will re-project this layer 
+to EPSG:4326 WGS84 projection.
+12. Right-click the tl_2013_us_county layer and select Save As...
+13. In the Save Vector layer as.. dialog, click Browse and name the output file as counties.shp. 
+Choose Selected CRS from the CRS dropdown menu. Click Browse and select WGS 84 as the 
+CRS. Check the Add saved file to map and click OK.
+14. A new layer named counties will be add to QGIS.
+15. Enable the Zonal Statistics Plugins. This is a core plugin so it is already installed. See Using 
+Plugins to know to how enable core plugins.
+16. Go to Raster ‣Zonal statistics ‣Zonal statistics.
+USIT6P4 (Discipline Specific Elective Practical) Principles of Geographic Information Systems Practical
+T. Y. B. Sc. (Information Technology) SEMESTER VI Teacher’s Reference Manual 
+111
+17. Select us.tmax_nohads_ll_{YYYYMMDD}_float as the Raster layer and counties as 
+the Polygon layer containing the zones. Enter ZS_ as the Output column prefix. Click OK.
+18. The analysis may take some time depending on the size of the dataset.
+19. Once the processing finishes, select the counties layer. Use the Identify tool and click on any 
+county polygon. You will see three new attributes added to the 
+layer: ZS_count, ZS_mean and ZS_sum. These attributes contain the count of raster pixels, 
+mean of raster pixel values and sum of raster pixel values respectively. Since we are interested 
+in average temperature, the ZS_meanfield will be the one to use.
+20. Let’s style this layer to create a temperature map. Right-click the counties layer and 
+select Properties.
+21. Switch to the Style tab. Choose Graduated style and select ZS_mean as the Column. Choose 
+a Color Ramp and Mode of your chose. Click Classify to create the classes. Click OK. 
+22. You will see the county polygons styled using average maximum temperature extracted from 
+the raster grid.
+
+
+c) Interpolating Point Data
+Procedure
+1. Open QGIS. Go to Layer ‣Add Layer ‣Add Vector Layer..
+2. Browse to the downloaded Shapefiles.zip file and select it. Click Open.
+3. In the Select layers to add... dialog, hold the Shift key and 
+select Arlington_Soundings_2007_stpl83.shp andBoundary2004_550_stpl83.shp layers. 
+Click OK.
+4. You will see the 2 layers loaded in QGIS. The Boundary2004_550_stpl83 layer represents the 
+boundary of the lake. Un-check the box next to it in the Table of Contents.
+5. This will reveal the data from the second layer Arlington_Soundings_2007_stpl83. Though the 
+data looks like lines, it is a series of points that are very close.
+6. Click the Zoom icon and select a small area on the screen. As you zoom closer, you will see the 
+points. Each point represents a reading taken by a Depth Sounder at the location recorded by 
+a DGPS equipment.
+7. Select the Identify tool and click on a point. You will see the Identify Results panel show up on 
+the left with the attribute value of the point. In this case, the ELEVATION attribute contains the 
+depth of the lake at the location. As our task is to create a depth profile and elevation contours, 
+we will use this values as input for the interpolation.
+8. Make sure you have the Interpolation plugin enabled. See Using Plugins for how to enable 
+plugins. Once enabled, go toRaster‣Interpolation ‣Interpolation.
+9. In the Interpolation dialog, select Arlington_Soundings_2007_stpl83 as the Vector layers in 
+the Input panel. Select ELEVATION as the Interpolation attribute. Click Add. Change 
+the Cellsize X and Cellsize Y values to 5. This value is the size of each pixel in the output grid. 
+Since our source data is in a projected CRS with Feet-US as units, based on our selection, the 
+grid size will be 5 feet. Click on the ... button next to Output file and name the output file 
+as elevation_tin.tif. CLick OK.
+10. You will see the new later elevation_tin loaded in QGIS. Right-click the layer and select Zoom 
+to layer.
+11. Now you will see the full extent of the created surface. Interpolation does not give accurate 
+results outside the collection area. Let’s clip the resulting surface with the lake boundary. Go 
+to Raster ‣Extraction ‣Clipper.
+12. Name the Output file as elevation_tin_clipped.tif. Select the Cliiped mode as Mask layer. 
+Select Boundary2004_550_stpl83 as the Mask layer`. Click OK.
+13. A new raster elevation_tin_clipped will be loaded in QGIS. We will now style this layer to 
+show the difference in elevations. Note the min and max elevation values from 
+the elevation_tin layer. Right-click the elevation_tin_clipped layer and select Properties.
+14. Go to the Style tab. Select Render type as Singleband pseudocolor. In the Generate new color 
+map panel, select Spectralcolor ramp. As we want to create a depth-map as opposed to a heightmap, check the Invert box. This will assign blues to deep areas and reds to shallow areas. 
+Click Classify.
+15. Switch to the Tranparency tab. We want to remove the black-pixels from our output. Enter 0 as 
+the Additional no data value. Click OK.
+16. Now you have a elevation relief map for the lake generated from the individual depth readings. 
+Let’s generate contours now. Go to Raster ‣Extraction ‣Contours.
+17. In the Contour dialog, enter contours as the Output file for contour lines. We will generate 
+contour lines at 5ft intervals, so enter 5.00 as the Interval between contour lines. Check 
+the Attribute name box. Click OK.
+18. The contour lines will be loaded as contours layer once the processing is finished. Right-click 
+the layer and select Properties.
+19. Go to the Labels tab. Check the Label this layer with box and select ELEV as the field. 
+Select Curved as the Placement type and click OK.
+20. You will see that each contour line will be appropriately labeled with the elevation along the 
+line.

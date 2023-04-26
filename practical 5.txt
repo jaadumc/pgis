@@ -1,0 +1,25 @@
+practical 5
+
+Working with Projections and WMS Data
+A Web Map Service (WMS) is a standard protocol developed by the Open Geospatial Consortium in 
+1999 for serving georeferenced map images over the Internet. These images are typically produced by a 
+map server from data provided by a GIS database
+➢ Start a new Project.
+➢ Layer → Add Layer →Vector Layer
+➢ Select “ne_10m_admin_0_countries.zip” Layer from data folder.
+➢ Go to Layer → Save As
+Select format as ESRI Shape File
+Select folder location and file name
+Set CRS North_America_Albers_Equal_Area_Conic EPSG: 102008
+➢ Press “OK”. 
+➢ Deselect the original Image and keep the projected layer visible.
+➢ Select Layer → Add Layer → Add Raster Layer → Select MiniScale_(standard)_R17.tif from 
+Location 
+“GIS_Workshop\Practicals\Practical_05\DATA\minisc_gb\minisc_gb\data\RGB_TIF_compres
+sed\MiniScale_(standard)_R17.tif”
+➢ The Layer appears on a different location than the location where Great Britain is shown on 
+Map.
+➢ Open Layer Properties→CRS → Search bri → select British National Grid EPSG 27700.
+➢ Processing may take some time.
+➢ Locate United Kingdom on Layer; the vector layer exactly coincides by the raster layer
+covering United Kingdom.

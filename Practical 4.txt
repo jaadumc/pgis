@@ -1,0 +1,69 @@
+Practical 4
+A. Working with attributes
+➢ Start a new project.
+➢ Go to Layer → Add Layer → Add Vector Layer
+➢ Select “\GIS_Workshop\Practicals\Practical_04\A\Data\ne_10m_populated_places_simple.zip”
+➢ Right click on Layer in Layer Panel → Open Attribute Table.
+➢ Explore various attributes and their values in the Attribute table.
+➢ To find the Place with maximum population click on “pop_max” file 
+➢ On clicking the Select feature using expression E button the following window will appear.
+➢ Enter pop_max>100 and pop_max<10000 and click select features button to get all the places with 
+population between 100 and 10000.
+➢ The places matching the criteria will appear in different color.
+➢ Different queries can be performed using the dataset.
+➢ Try this command on expression pop_max> and pop_max<10000 and "sov0name" = 'India'
+➢ Use the deselect yellow cancel button to deselect the feature to be rendered in original color.
+
+
+b) Terrain Data and Hill shade analysis
+A terrain dataset is a multiresolution, TIN-based surface built from measurements stored as features 
+in a geodatabase. Terrain or elevation data is useful for many GIS Analysis like, to generate various 
+products from elevation data such as contours, hillshade etc. 
+➢ Go to Layer → Add Raster Layer → select “10n060e_20101117_gmted_mea300.tif”, from 
+Data folder
+➢ The Lower altitude regions are shown using dark color and higher using light shade as seen on 
+top region containing Himalaya and Mt Everest. 
+➢ Mt. Everest - is located at the coordinates 27.9881° N, 86.9253° E.
+➢ Enter 86.92, 27.98 in the coordinate field, Scale 900000 and Magnifier 100% at the bottom of 
+QGIS.
+➢ Press enter the view port will be centered on Himalaya Region.
+➢ Crop the raster layer only for the region under study.
+➢ Go to Raster → Extraction→ Clip Raster by Extent
+➢ Select the raster layer (if project contains multiple layers).
+➢ Select the clipping area by selecting the option Use Canvas Extends if the visible part of map 
+is to be selected or manually select an area on canvas by using Select Extent on Canvas.
+➢ Select the location and file name for storing clipped raster layer.
+➢ Press RUN.
+➢ Deselect the original layer and keep the clipped one.
+➢ The Clipped raster layer is representing altitude are from 103 Meters.Original Raster and Clipped Raster should be tick
+➢ Counter lines are the lines on a map joining points of equal height above or below sea level. A 
+contour interval in surveying is the vertical distance or the difference in the elevation between 
+the two contour lines in a topographical map.
+➢ To derive counter lines from given raster.
+➢ Go to Raster → Extraction→ Contour
+➢ The Contour configuration window will appear-> input layer(clipped extent EPSG:4326)-> interval between contour lines 100.00-> ELEV-> contours(...)-> open output file after running algorithm.
+➢ Select the input raster layer name. Set contour interval 100.00 meters, select the output file 
+name & location and check the option to add output file to project after processing.
+➢ Press “RUN”.
+➢ The contour layer will appear like this
+➢ Label the layer using “ELEV” field and set appropriate symbols for line.
+ 
+➢ In the Layer panel right click on Contour Raster Layer and select “Open Attribute table”, 
+➢ Arrange the table in descending order based on the value of “ELEV” column. 
+➢Compare the above counter line raster layer with the previous Google map image
+➢ To verify the above contour files using Google Map
+➢ Make a copy of Contour Layer, Go to Layer →Save As
+➢ Select file format as “Keyhole Markup Language”, set file name, location and Layer Name.
+➢ Also set CRS to WGS 84 EPSG:4326
+➢ Go to the stored location on Hard Disk and open the “Himalayan_Google_Map_File.kml” with 
+Google Map.\
+----------------------------------------------------------------------------------------------------------------------------
+A Hillshade is a grayscale 3D representation of the surface, showing the topographical shape of hills 
+and mountains using shading (levels of gray) on a map, just to indicate relative slopes, mountain ridges, 
+not absolute height. 
+➢ For Hill Shade surface analysis
+➢ Go to Plugin → Install Georeferencer GADL.
+➢ After successful installation of plugin Go to Raster → Analysis → Hill Shade
+➢ Select the input raster layer, select file name and location for storing Hill Shade output file. 
+➢ Press “RUN” and Close the Hill Shape Dialog window.
+➢ After Raster styling the Output will appear like this

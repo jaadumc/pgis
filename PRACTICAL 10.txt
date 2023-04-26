@@ -1,0 +1,138 @@
+PRACTICAL 10
+
+A. Validating map data.
+
+1. Open the “Kenya_epidemiological_data.xls” in Microsoft Excel. Additionally open the corresponding dictionary “Kenya_epidemiological_dict.xls”, which          
+   contains a description of all variables and information about their coding.
+2. You should make note of the number of entries in your database, as you will need to keep track of any changes e.g. when you remove duplicates at a later            
+   stage.
+
+The following steps we need to perform in the Stage II of performing Structural Data checks
+A. Format of the Database
+B. Removing Duplicates
+C. Coding of variables
+
+2A Format of the database
+1. Open Kenya_epidemiological_data.xls in excel.
+2. Go to the View tab, click Freeze Panes and choose Freeze Top Row.
+   select the entire “child_id‟ column(first column),
+3. Under Home Tab, click on Conditional formatting >Highlight Cell Rules> Select Duplicate values
+4. Now select the first combo box and select Duplicate and select Light red fill with Dark red text in the
+   next combo box as shown in figure
+
+2B Removing Duplicates
+1. Select all the columns of existing worksheet
+2. Now go to Data Tab and select Remove Duplicates
+
+2C Coding of variables
+1. In the current worksheet, select the sex column.
+2. Now type Ctrl+F and use Replace Function and Replace as follows
+   M-1
+   F-2
+3. Please keep track of how many values are getting replace.
+
+Step 3 Verifying the plausibility of data
+In this step, we perform two basic operations
+A. Coding of variables
+B. Using a filter to detect outliners
+
+3A Coding of variables
+1. Select the age column in the existing worksheet.
+2. Now go to Insert tab and select Scatter. You will set chart as shown below
+
+3B Using a filter to detect outliners
+1. First go to the Home Tab>Sort and Filter>Filter. Click and apply the filter to all the columns of the
+   worksheet.
+2. Now click on age filter and click on Number Filter> Greater Than option and type the value 20 in
+   greater than field.
+
+Step 4: Logical Data checks
+In this step, we perform two basic operations
+A. Cross Tabulations
+B. Formulas
+
+4A. Cross Tabulations
+1. Open the existing worksheet. Now go to Insert Tab and select Pivot table function.
+2. Select New Worksheet and click OK
+3. An empty table is inserted in a new sheet and a window will open on the right hand side named PIVOT
+   TABLE FIELD LIST.
+4. From the PivotTable Field List, drag the “stool” item and drop it into the “Row Label” field as show
+   above.
+5. Similarly, Click on anysth_inf and draw it into the “Column labels” and “Σ Values” field.
+6. To include the count of observations in the table you might need to change the value field settings to
+   count.
+7. Click on the combo box Sum of stools and Click on Value Field Settings.
+   Change the value in Summarize value filed by to Count and click OK. Table is updated with count values as shown below
+
+4B Formulas
+1. Open the existing worksheet
+2. Create a new column with the variable called check
+3. Type the following formula in S2 column of worksheet =IF(AND(H2=0, NOT(P2="")),1,0)
+4. Now copy the formula to all other cells (ensure that the formula is copied to all rows in your dataset)
+   Now use the filter to show only entries with a check value of 1.
+
+Step 5: Verifying the coordinates of mapping data
+1. Create a New Project in QGIS Desktop 3.4.2.
+2. Let’s add the files!
+3. Navigate to Add Vector Layer and add file: Kenya_admin.shp
+4. Similarly, navigate to Add Delimited Text Layer.
+5. Here we have to add file: Kenya_school_location.csv. In the Geometry Definition section, there is a field called Geometry CRS, in that we have to select                           WGS84 as coordinate system.
+6. As you can see 2 points are not on the map.
+7. To examine this, we need to save these layers as a Shapefile, to do that select both the layers Kenya_school_location and Kenya admin, then right click           on them and choose Save Features A.   
+8. In the menu that comes up, set Format as ESRI Shapefile and put File Name as Kenya_schools.shp
+9. After this is done you can uncheck the Kenya_school_location in the layers section.
+10. Let’s try and get the details of these 2 points that are not on the map, select the Kenya_schools layer, click on the Identify Features Tool button and then click on the points outside of Kenya to get their details.
+11. Now we want to add the district information to the map. Therefore, we will join information based on the geographical localization.
+12. In the menu click on Vector, then Data Management Tools, then select Join attributes by location.
+13. Then select Kenya_schools as Input layer and Kenya_admin as Join layer.
+14. We also need to save the output so in Joined Layer, click “…”button to Browse location.
+15. Save as Kenya_school_district.csv
+16. And then click run.
+    After it is done…
+17. Navigate to the location of saved file Kenya_school_district.csvand open it, you should now be able to compare both district and Name for discrepancies.
+18. We need to change the co-ordinate of those 2 points which were not on the map. So, open the file Kenya_school_location.csv and make the following      changes, set:
+IBWALI: Longitude 34.6459198
+SIWOT: Longitude 35.35437012
+19. Save the file as: Kenya_school_location2.csv.
+
+Step 6: Preparing data for mapping
+1. Open Kenya_epidemiological_data_2.xls, select the entire sheet, go to Insert tab to create new Pivot Table.
+2. Tick New Worksheet to tell Excel that you want to place the table in a new sheet.
+3. Now click on school_idtodragand drop it in the “Row labels” field at the bottom.
+4. Add district_id to“Σ Values”and click on it, a drop down list will open, click on Value Field Settings. Choose Average as type of calculation, because   
+   all children in the same school will have same district_id.
+5. Now drag and dropchild_id into the “Σ Values” field, click on Value Field Settings and choose Count to summarize the results. So, we come to know how    
+   many children per school are infected.
+   Similarly, Drag and dropanysth_inf into the field, click on Value Field Settingsand choose Sum. As, infected is 1 and not affected is 0, the sum will    
+   give us the total number of infected children
+6. Now copy the table, open a new Excel file and paste the values into the new spreadsheet. Therefore, click Paste in the Home tab, then choose Paste   
+   special and paste only the values.
+7. Remove the last row which has Grand Total and other values.
+8. Save this new data table as Kenya_school_STH_surveys.xlsx
+9. Now we need to know the total count of infected children, that is, the prevalence of STH.
+10. So, w ecreate a new column:sth_previn which we are going to be dividing the number of infected children by the number of children and multiplying by 
+    hundred to obtain a value in percent (%).
+11. In the first cell under the heading type =F2/C2*100 (this assumes that your number of children is in row C and the number of infected children in row F;
+    you will need to adjust the column label accordingly); then copy the formula to the other cells in the column.     
+12. Additionally, you could calculate the 95% confidence interval (CI) of your prevalence.
+13. You will have to create a new column called “CIlow” (lower confidence limit) and “CIup”(upper confidence limit)
+14. You can calculate the limits by typing the formulas as follows and then copying to the other cells: 
+    For CIlow: =I2 - (1.96*(SQRT((I2*(100-I2)/C2))))
+    For CIup: =I2 + (1.96*(SQRT((I2*(100-I2)/C2))))
+    Assuming I2 as sth_prev and C2 as Count of child_id, adjust accordingly.
+15. Save this file as Kenya_epidemiological_school.csv
+    Now that all the datasets are ready, let’s add them.
+16. Open a new QGIS project.
+17. First, add Kenya_school_location2.csv to the project. Click on Add Delimited text layer in the menu, and browse to select the file.
+18. Similarly, Add Vector Layer and add Kenya_ epidemiological_school.csv
+19. Now we’ll join the data.
+    Right click on Kenya _school_location2 layer and click on Properties
+20. Go to the Joins section and click on the plus(+) button at the bottom
+21.For “Join layer” chooseKenya_epidemiological_school and for“Join field” and “Target field” choose school_id. Then click on OK.
+22. Right click on Kenya_school_location2 layer and select Open Attribute Table.
+23. You will see that the epidemiological variables are included.
+24. We are finally done, now we just have to save the files!!
+    Select all the layers, right-click on them and in Export select Save Features As.
+25. Select Format as ESRI Shapefile and File Name as: Kenya_school_epidata.shp
+
+

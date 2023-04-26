@@ -1,0 +1,64 @@
+Practical 7
+Managing Data Tables and Saptial data Sets: 
+a) Table joins
+➢ Start a new project 
+➢ Go to Layer → Add Layer → Add new Vector Layer
+“I:\GIS_Workshop\Practicals\Practical_07\A\Data\tl_2013_06_tract.zip”
+➢ We could import this csv file without any further action and it would be imported. But, the default 
+type of each column would be a String (text). That is ok except for the D001 field which contains 
+numbers for the population. Having those imported as text would not allow us to run any 
+mathematical operations on this column. To tell QGIS to import the field as a number, we need to 
+create a sidecar file with a .csvt extension.
+➢ This file will have only 1 row specifying data types for each column. Save this file as 
+ca_tracts_pop.csvt in the same directory as the original .csv file.
+➢ Go to Layer → Add Layer → Add Delimited Text Layer
+And add I:\GIS_Workshop\Practicals\Practical_07\A\Data\ca_tacts_pop.csv”
+➢ In the layer panel, Right click on “tl_2013_06_tract”, layer and select Properties
+➢ Select the option in Properties, and click on button to add new table join.
+➢ In the Add Vector Join window set the following properties and click OK.
+➢ After performing join 
+➢ For more clear output, select “tl_2013_06_tact” from Layer Panel, right click and select 
+properties. Go to Symbology and set the following properties.
+➢ A detailed and accurate population map of California can be seen as the result. Same technique 
+can be used to create maps based on variety of census data.
+
+
+
+b) spatial joins
+➢ Go to Layer → Add Layer → Add Vector Layer → Select 
+“I:\GIS_Workshop\Practicals\Practical_07\B\Data\nybb_12c\nybb_13c_av\nybb.shp” and
+“I:\GIS_Workshop\Practicals\Practical_07\B\Data\OEM_NursingHomes_001\OEM_NursingHo
+mes_001.shp”, from data folder.
+➢ Go to attribute table and observe the data.
+➢ Table before performing Join 
+➢ Go to Vector → Data Management Tools → Join Attributes by Location
+➢ Attribute table after join
+➢ Use the Identify Feature Button to select a region to view join data on map Layer. 
+➢ Output
+
+
+
+c) Points in polygon analysis
+➢ Go to Layer → Add Layer → Add Delimited Text Layer
+Select “EarthQuakeDatabase.txt”
+➢ Go to Layer → Add Layer → Add Delimited Text Layer
+“I:\GIS_Workshop\Practicals\Practical_07\C\Data\ne_10m_admin_0_countries.zip”
+➢ Use the select Feature i button to check country wise counting of Earthquakes.
+➢ Also a new column is added to attribute table “NumPoints” indicating number of earth quake 
+points in each country.
+
+
+d) Performing spatial queries
+➢ Go to Layer → Add Layer → Add Vector Layer and load
+“\GIS_Workshop\Practicals\Practical_07\D\Data\ne_10m_populated_places_simple\ne_10m_popul
+ated_places_simple.shp” and 
+“I:\GIS_Workshop\Practicals\Practical_07\D\Data\ne_10m_rivers_lake_centerlines\ne_10m_rivers
+_lake_centerlines.shp” from project data folder.
+➢ Open project Properties → Set CRS “World_Azimuthal_Equidistant EPSG 54032” . The map will 
+be re-projected as
+➢ Go to Vector → Geoprocessing Tool → Buffer
+➢ Repeat the step to create River Buffer
+➢ Create a buffer for River
+➢ Go to Vector → Research Tool → Select By Location
+➢ This will highlight only those rivers containing a populated place within 2 KM
+
